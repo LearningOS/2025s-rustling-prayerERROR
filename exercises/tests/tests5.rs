@@ -22,7 +22,6 @@
 // Execute `rustlings hint tests5` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 /// # Safety
 ///
@@ -32,7 +31,8 @@ unsafe fn modify_by_address(address: usize) {
     // code's behavior and the contract of this function. You may use the
     // comment of the test below as your format reference.
     unsafe {
-        todo!("Your code goes here")
+        let ptr = address as *mut u32;
+        *ptr = 0xAABBCCDD;
     }
 }
 
@@ -42,10 +42,10 @@ mod tests {
 
     #[test]
     fn test_success() {
-        let mut t: u32 = 0x12345678;
+        let t: u32 = 0x12345678;
         // SAFETY: The address is guaranteed to be valid and contains
         // a unique reference to a `u32` local variable.
-        unsafe { modify_by_address(&mut t as *mut u32 as usize) };
+        unsafe { modify_by_address(&t as *const u32 as usize) };
         assert!(t == 0xAABBCCDD);
     }
 }
