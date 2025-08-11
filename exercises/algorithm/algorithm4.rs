@@ -50,25 +50,69 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        if self.root.is_none() {
+            self.root = Some(Box::new(TreeNode::new(value)));
+            return;
+        }
+
+        let mut curr_node = self.root.as_mut().unwrap();
+        loop {
+            if curr_node.value > value {
+                if curr_node.left.is_some() {
+                    curr_node = curr_node.left.as_mut().unwrap();
+                } else {
+                    curr_node.left = Some(Box::new(TreeNode::new(value)));
+                    break;
+                }  
+            } else if curr_node.value < value {
+                if curr_node.right.is_some() {
+                    curr_node = curr_node.right.as_mut().unwrap();
+                } else {
+                    curr_node.right = Some(Box::new(TreeNode::new(value)));
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        if self.root.is_none() {
+            return false;
+        }
+
+        let mut curr_node = self.root.as_ref().unwrap();
+        loop {
+            if curr_node.value > value {
+                if curr_node.left.is_some() {
+                    curr_node = curr_node.left.as_ref().unwrap();
+                } else {
+                    return false;
+                }
+            } else if curr_node.value < value {
+                if curr_node.right.is_some() {
+                    curr_node = curr_node.right.as_ref().unwrap();
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
     }
 }
 
-impl<T> TreeNode<T>
-where
-    T: Ord,
-{
-    // Insert a node into the tree
-    fn insert(&mut self, value: T) {
-        //TODO
-    }
-}
+// impl<T> TreeNode<T>
+// where
+//     T: Ord,
+// {
+//     // Insert a node into the tree
+//     fn insert(&mut self, value: T) {
+        
+//     }
+// }
 
 
 #[cfg(test)]
