@@ -2,7 +2,6 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,7 +36,16 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.items.push(value);
+        self.count += 1;
+        let mut curr_idx = self.count;
+        let mut pare_idx = self.parent_idx(curr_idx);
+        while curr_idx > 1
+        && (self.comparator)(&self.items[curr_idx], &self.items[pare_idx]) {
+            self.items.swap(curr_idx, pare_idx);
+            curr_idx = pare_idx;
+            pare_idx = self.parent_idx(curr_idx);
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -58,7 +66,7 @@ where
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
-		0
+		1
     }
 }
 
@@ -85,7 +93,40 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+		if self.count == 0 {
+            None
+        } else if self.count == 1 {
+            self.count -= 1;
+            self.items.pop()
+        } else {
+            self.items.swap(1, self.count);
+            self.count -= 1;
+            let res = self.items.pop();
+            let mut curr_idx: usize = 1;
+            loop {
+                let mut new_idx = curr_idx;
+                let left_idx = self.left_child_idx(new_idx);
+                let right_idx = self.right_child_idx(new_idx);
+
+                if left_idx <= self.count
+                && (self.comparator)(&self.items[left_idx], &self.items[new_idx]) {
+                    new_idx = left_idx;
+                }
+
+                if right_idx <= self.count
+                && (self.comparator)(&self.items[right_idx], &self.items[new_idx]) {
+                    new_idx = right_idx;
+                }
+
+                if new_idx != curr_idx {
+                    self.items.swap(curr_idx, new_idx);
+                    curr_idx = new_idx;
+                } else {
+                    break;
+                }
+            }
+            res
+        }
     }
 }
 
